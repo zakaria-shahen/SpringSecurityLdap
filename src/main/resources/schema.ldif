@@ -1,0 +1,31 @@
+
+dn: dc=springsecurityinactionbook,dc=com
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: springsecurityinactionbook
+
+dn: ou=groups,dc=springsecurityinactionbook,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: uid=admin,ou=groups,dc=springsecurityinactionbook,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: admin
+sn: admin
+uid: admin
+userPassword: {bcrypt}$2a$10$qXONz1XTie5nVtP03nVhpe56jTVU.Bctl3ZYZ5XyfdBUuvqUWuvYy
+
+dn: uid=user,ou=groups,dc=springsecurityinactionbook,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: user
+sn: user
+uid: user
+userPassword: {bcrypt}$2a$10$mCP..Z5dulJOuq4y.LSaBu1D12zvqJiBdwTC4MYDhQ0YyFQeqxXSG

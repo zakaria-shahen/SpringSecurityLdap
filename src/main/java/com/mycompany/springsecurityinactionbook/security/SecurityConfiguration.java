@@ -2,39 +2,25 @@ package com.mycompany.springsecurityinactionbook.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
+import org.springframework.ldap.core.support.BaseLdapPathContextSource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.ldap.LdapPasswordComparisonAuthenticationManagerFactory;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.ldap.userdetails.PersonContextMapper;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.sql.DataSource;
-
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfiguration {
 
     @Bean
-    public UserDetailsService configUserManager(DataSource dataSource, PasswordEncoder passwordEncoder) {
-        JdbcUserDetailsManager userDetailsService = new JdbcUserDetailsManager(dataSource);
-        userDetailsService.createUser(
-                User.withUsername("user")
-                .password("user")
-                .roles("USER")
-                .passwordEncoder(passwordEncoder::encode)
-                .build()
-        );
-        userDetailsService.createUser(
-                User.withUsername("admin")
-                        .password("admin")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles("ADMIN")
-                        .build()
-        );
-
-        return userDetailsService;
+    AuthenticationManager ldapAuthenticationManager(BaseLdapPathContextSource contextSource, PasswordEncoder passwordEncoder) {
+        var factory = new LdapPasswordComparisonAuthenticationManagerFactory(contextSource, passwordEncoder);
+        factory.setUserDnPatterns("uid={0},ou=groups,dc=springsecurityinactionbook,dc=com");
+        factory.setUserDetailsContextMapper(new PersonContextMapper());
+        return factory.createAuthenticationManager();
     }
 
     @Bean

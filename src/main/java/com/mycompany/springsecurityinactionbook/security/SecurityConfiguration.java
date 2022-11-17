@@ -8,28 +8,33 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @EnableWebSecurity
 public class SecurityConfiguration {
 
     @Bean
-    public UserDetailsService configUserManager(PasswordEncoder passwordEncoder) {
-        return new InMemoryUserDetailsManager(
-                User.builder()
-                        .username("user")
-                        .password("user")
-                        .roles("USER")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .build(),
-                User.builder()
-                        .username("admin")
+    public UserDetailsService configUserManager(DataSource dataSource, PasswordEncoder passwordEncoder) {
+        JdbcUserDetailsManager userDetailsService = new JdbcUserDetailsManager(dataSource);
+        userDetailsService.createUser(
+                User.withUsername("user")
+                .password("user")
+                .roles("USER")
+                .passwordEncoder(passwordEncoder::encode)
+                .build()
+        );
+        userDetailsService.createUser(
+                User.withUsername("admin")
                         .password("admin")
                         .passwordEncoder(passwordEncoder::encode)
                         .roles("ADMIN")
                         .build()
         );
+
+        return userDetailsService;
     }
 
     @Bean
@@ -67,7 +72,6 @@ public class SecurityConfiguration {
         httpSecurity
                 .mvcMatcher("/home")
                 .anonymous();
-
         return httpSecurity.build();
     }
 

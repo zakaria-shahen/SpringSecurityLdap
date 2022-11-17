@@ -12,7 +12,7 @@ class SpringSecurityInActionBookApplicationTests {
     void contextLoads() {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         System.out.println(passwordEncoder.encode("admin"));
-        System.out.println(passwordEncoder.encode("admin"));
+        System.out.println(passwordEncoder.encode("user"));
         System.out.println(passwordEncoder.matches("admin", passwordEncoder.encode("admin")));
     }
 

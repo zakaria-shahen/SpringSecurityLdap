@@ -10,7 +10,12 @@ objectclass: top
 objectclass: organizationalUnit
 ou: groups
 
-dn: uid=admin,ou=groups,dc=springsecurityinactionbook,dc=com
+dn: ou=people,dc=springsecurityinactionbook,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+dn: uid=admin,ou=people,dc=springsecurityinactionbook,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
@@ -20,7 +25,7 @@ sn: admin
 uid: admin
 userPassword: {bcrypt}$2a$10$qXONz1XTie5nVtP03nVhpe56jTVU.Bctl3ZYZ5XyfdBUuvqUWuvYy
 
-dn: uid=user,ou=groups,dc=springsecurityinactionbook,dc=com
+dn: uid=user,ou=people,dc=springsecurityinactionbook,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
@@ -29,3 +34,16 @@ cn: user
 sn: user
 uid: user
 userPassword: {bcrypt}$2a$10$mCP..Z5dulJOuq4y.LSaBu1D12zvqJiBdwTC4MYDhQ0YyFQeqxXSG
+
+dn: cn=user,ou=groups,dc=springsecurityinactionbook,dc=com
+objectclass: top
+objectclass: groupOfNames
+cn: user
+member: uid=admin,ou=people,dc=springsecurityinactionbook,dc=com
+member: uid=user,ou=people,dc=springsecurityinactionbook,dc=com
+
+dn: cn=admin,ou=groups,dc=springsecurityinactionbook,dc=com
+objectclass: top
+objectclass: groupOfNames
+cn: admin
+member: uid=admin,ou=people,dc=springsecurityinactionbook,dc=com

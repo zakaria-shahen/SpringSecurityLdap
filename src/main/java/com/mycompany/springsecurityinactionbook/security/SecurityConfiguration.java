@@ -1,5 +1,6 @@
 package com.mycompany.springsecurityinactionbook.security;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.ldap.core.support.BaseLdapPathContextSource;
@@ -7,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.ldap.LdapPasswordComparisonAuthenticationManagerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator;
@@ -73,6 +75,14 @@ public class SecurityConfiguration {
                 .mvcMatcher("/home")
                 .anonymous();
         return httpSecurity.build();
+    }
+
+
+    @Bean
+    public InitializingBean initializingBean(){
+
+        return () -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+
     }
 
 }
